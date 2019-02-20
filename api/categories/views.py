@@ -1,4 +1,5 @@
 from django.http import JsonResponse, HttpRequest
+from django.shortcuts import get_object_or_404
 from categories.models import Category
 import json
 from api_utils.views_utils import get_category_names, validate_data
@@ -9,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 def get(request: HttpRequest):
     pk = request.GET.get('id')
 
-    category = Category.objects.get(pk=pk)
+    category = get_object_or_404(Category, pk=pk)
 
     category_serialized = {'id': category.pk, 'name': category.name}
     parents_serialized = [{'id': parent.id, 'name': parent.name} for parent in Category.get_parents(pk)]
